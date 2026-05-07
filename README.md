@@ -8,7 +8,7 @@
 
 **APIs:** Random Animal API (https://rapidapi.com/sathishluvsatz/api/random-animal-api), Cloudinary (https://cloudinary.com)
 
-**Contact Email:** fali8#terpmail.umd.edu
+**Contact Email:** fali8@terpmail.umd.edu
 
 **Deployed App Link:** [https://random-animal-drawing-app.onrender.com](https://random-animal-drawing-app.onrender.com)
 
