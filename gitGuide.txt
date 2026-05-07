@@ -1,0 +1,51 @@
+================================================
+        GIT BRANCH WORKFLOW - TEAM GUIDE
+================================================
+
+FIRST TIME SETUP (do this once)
+---------------------------------
+1. Clone the repo
+   git clone <repo-url>
+   cd <project-folder>
+
+2. Install dependencies
+   npm install
+
+
+EVERY TIME YOU START WORKING
+---------------------------------
+1. Get the latest changes from main
+   git checkout main
+   git pull origin main
+   npm install        (in case teammates added new packages)
+
+2. Create your own branch
+   (name it something descriptive e.g. add-login-page)
+   git checkout -b your-branch-name
+
+
+WHILE WORKING - SAVE YOUR PROGRESS
+---------------------------------
+1. Check what files you changed
+   git status
+
+2. Stage and commit your changes
+   git add .
+   git commit -m "describe what you did"
+
+3. Push your branch to GitHub
+   git push origin your-branch-name
+
+
+WHEN YOUR FEATURE IS DONE
+---------------------------------
+1. Open a pull request on GitHub
+   - Go to the repo on GitHub
+   - Click "Compare & pull request"
+   - Ask a teammate to review before merging into main
+
+
+================================================
+  !! NEVER commit directly to main !!
+  Always work on your own branch
+================================================
