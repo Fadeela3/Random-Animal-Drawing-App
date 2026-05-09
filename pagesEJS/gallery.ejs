@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Gallery</title>
+</head>
+<body>
+    <section id="gallery">
+
+        <h1>Your Gallery</h1>
+    
+        <!-- Repeat this block for each saved drawing -->
+        <div>
+            <img src="<%- imageUrl %>" alt="Drawing of a <%- animal %> by <%- name %>"/>
+            <p><strong>Title:</strong> <%- title %></p>
+            <p><strong>Artist:</strong> <%- name %></p>
+            <p><strong>Animal Prompt:</strong> <%- animal %></p>
+            <p><strong>Message:</strong> <%- message %></p>
+            <p><strong>Date:</strong> <%- date %></p>
+        </div>
+    
+    </section>
+</body>
+</html>

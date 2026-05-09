@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>WildSketch</title>
+</head>
+<body>
+<!-- ── DRAW PAGE ── -->
+<section id="draw">
+    <h1>DRAWING APP</h1>
+    <h2>Get Your Animal Prompt</h2>
+    <p>Your animal: <strong id="animal-display"></strong></p>
+    <button>🎲 Random Animal</button>
+
+    <h2>Draw It!</h2>
+    <canvas width="640" height="420" style="border:1px solid black;"></canvas>
+    <br>
+    <label>Tool: 
+    <select>
+        <option>Pen</option>
+        <option>Eraser</option>
+    </select>
+    </label>
+    <label>Color: <input type="color" value="#000000"/></label>
+    <label>Size: <input type="range" min="1" max="40" value="5"/></label>
+    <button>Clear</button>
+
+    <h2>Add Your Details</h2>
+    <form action="http://localhost:/drawing" method="post">
+        <label>Title: <input type="text" placeholder="My Magnificent Flamingo"/></label><br>
+        <label>Your Name: <input type="text" placeholder="Anonymous"/></label><br>
+        <label>Message: <br><textarea placeholder="Tell us about your drawing…"></textarea></label><br>
+        <button>Upload to Gallery</button>
+    </form>
+
+</section>
+
+</body>
+</html>
