@@ -5,16 +5,17 @@ const path = require('path');
 const express = require('express');
 const app = express();
 //// ! these commands are only for testing make sure you comment it out before pushing to main or there will be problems with the render deplyment
+/*
 require("dotenv").config({
    path: path.resolve(__dirname, "credentialsDontPost/.env"),
-}); //*/
+}); */
 const PORT = process.env.PORT || 3000;
 //routes
 const drawingRoute = require('./routes/drawings');
 const promptRoute = require('./routes/prompt');
 app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'templates')));
-
+app.get('/favicon.ico', (req, res) => res.status(204).end()); //get rid of the favicon 404 error in the browser terminal
 
 // set template engine
 // const { openDelimiter } = require('ejs');
