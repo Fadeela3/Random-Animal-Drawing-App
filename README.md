@@ -1,6 +1,6 @@
 **Submitted by:** SOMEONE (UID)
 
-**Group Members:** Fadeela Ali (fali8), Anum Chohan (achohan)
+**Group Members:** Fadeela Ali (fali8), Anum Chohan (achohan), Dalia Bader (dbader1)
 
 **App Description:** A drawing app where users are given a random animal prompt fetched from an external animal API. The user then draws that animal on an HTML canvas and submits their drawing to a gallery page.
 
