@@ -1,0 +1,212 @@
+
+:root {
+    --cream:      #f5f0e8;
+    --cream-dark: #ece5d4;
+    --ink:        #1c1612;
+    --ink-light:  #4a3f35;
+    --ink-faint:  #8a7e72;
+    --rust:       #c0502a;
+    --rust-light: #e8795a;
+    --white:      #fdfaf5;
+  
+    --card-shadow: 0 2px 8px rgba(28,22,18,0.10), 0 8px 24px rgba(28,22,18,0.07);
+  
+    --radius: 4px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body:    'DM Sans', sans-serif;
+  }
+  
+  /* ── Reset */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  /* ── Base */
+  body {
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent, transparent 28px,
+        rgba(28,22,18,0.025) 28px, rgba(28,22,18,0.025) 29px
+      );
+  }
+  
+  /* ── Navbar  */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background-color: var(--ink);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  
+  .nav-links { display: flex; gap: 2rem; }
+  
+  .nav-links a {
+    color: var(--ink-faint);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--cream); }
+  
+  /* ── Footer */
+  .site-footer {
+    background-color: var(--ink);
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .footer-cta {
+    color: var(--rust-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .footer-cta:hover { color: var(--cream); }
+  
+  /* ── Gallery Header */
+  .gallery-header { text-align: center; padding: 4rem 2rem 2.5rem; }
+  
+  .gallery-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  
+  .gallery-subtitle {
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    max-width: 480px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+  
+  /* ── Empty State */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 5rem 2rem;
+    text-align: center;
+    color: var(--ink-light);
+  }
+  
+  .empty-emoji { font-size: 3rem; }
+  
+  .btn-primary {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.65rem 1.5rem;
+    background-color: var(--rust);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.1s;
+  }
+  
+  .btn-primary:hover { background-color: var(--rust-light); transform: translateY(-1px); }
+  
+  /* ── Gallery List */
+  .gallery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* ── Gallery Row (image left, info right) */
+  .gallery-row {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.25rem;
+    animation: card-in 0.4s ease both;
+  }
+  
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  .gallery-img {
+    width: 280px;
+    height: 200px;
+    object-fit: contain;
+    background-color: var(--cream-dark);
+    border-radius: var(--radius);
+    flex-shrink: 0;
+  }
+  
+  .gallery-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+  
+  .gallery-animal {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  
+  .gallery-details {
+    background-color: var(--cream-dark);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .gallery-details p {
+    font-size: 0.95rem;
+    color: var(--ink-light);
+  }
+  
+  .detail-label {
+    font-weight: 500;
+    color: var(--ink);
+  }
