@@ -2,7 +2,6 @@
 // const http = require('http');
 const path = require('path');
 // const fs = require('fs'); 
-const bodyParser = require("body-parser");
 const express = require('express');
 const app = express();
 //// ! these commands are only for testing make sure you comment it out before pushing to main or there will be problems with the render deplyment
@@ -10,21 +9,20 @@ require("dotenv").config({
    path: path.resolve(__dirname, "credentialsDontPost/.env"),
 }); //*/
 const PORT = process.env.PORT || 3000;
+//routes
+const drawingRoute = require('./routes/drawings');
+const promptRoute = require('./routes/prompt');
+app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'templates')));
+
 
 // set template engine
-const { openDelimiter } = require('ejs');
+// const { openDelimiter } = require('ejs');
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "templates")); // set proper folder path to the templates folder
 
 //mongoDB and mongoose stuff
-
 const mongoose = require("mongoose");
-// const { MongoClient, ServerApiVersion } = require("mongodb");
-
-app.get('/', (req, res) => {
-    res.render("main");
-});
-
 
 mongoose.connect(process.env.MONGO_CONNECTION_STRING)
     .then(() => { //if success, start the server
@@ -39,3 +37,10 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING)
     });
 
 //mongoose.disconnect() //apparently not needed for web servers
+
+app.get('/', (req, res) => {
+    res.render("main");
+});
+
+app.use('/', drawingRoute);
+app.use('/', promptRoute);
