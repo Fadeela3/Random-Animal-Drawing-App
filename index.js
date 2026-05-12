@@ -4,11 +4,9 @@ const path = require('path');
 // const fs = require('fs'); 
 const express = require('express');
 const app = express();
-//// ! these commands are only for testing make sure you comment it out before pushing to main or there will be problems with the render deplyment
-/*
 require("dotenv").config({
    path: path.resolve(__dirname, "credentialsDontPost/.env"),
-}); */
+});
 const PORT = process.env.PORT || 3000;
 //routes
 const drawingRoute = require('./routes/drawings');
@@ -41,6 +39,14 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING)
 
 app.get('/', (req, res) => {
     res.render("main");
+});
+
+app.get('/drawing', (req, res) => {
+    res.render("drawing");
+});
+
+app.get('/gallery', (req, res) => {
+    res.render("gallery");
 });
 
 app.use('/', drawingRoute);
