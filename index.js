@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 //routes
 const drawingRoute = require('./routes/drawings');
 const promptRoute = require('./routes/prompt');
-app.use(express.static('public'));
+app.use(express.static('templates'));
 app.use(express.static(path.join(__dirname, 'templates')));
 app.get('/favicon.ico', (req, res) => res.status(204).end()); //get rid of the favicon 404 error in the browser terminal
 
