@@ -37,9 +37,9 @@
 
     <% drawings.forEach(function(d) { %>
       <div class="gallery-row">
-        <img class="gallery-img" src="<%= d.imageUrl || d.image %>" alt="Drawing of a <%= d.animal %>" />
+        <img class="gallery-img" src="<%= d.imageUrl || d.image %>" alt="Drawing of a <%= d.animalPrompt %>" />
         <div class="gallery-info">
-          <h2 class="gallery-animal"><%= d.animal %></h2>
+          <h2 class="gallery-animal"><%= d.animalPrompt %></h2>
           <div class="gallery-details">
             <p><span class="detail-label">Title:</span> <%= d.title || 'Untitled' %></p>
             <p><span class="detail-label">Artist:</span> <%= d.artistName || d.author || 'Anonymous' %></p>
@@ -52,7 +52,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>Scribble Zoo — Where every animal deserves a portrait.</p>
+    <p>Animal Drawing App — Where every animal deserves a portrait.</p>
     <a href="/" class="footer-cta">Pick up a pencil →</a>
   </footer>
 

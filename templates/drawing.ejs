@@ -6,13 +6,19 @@
     <link rel="stylesheet" href="/style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
+<script>
+    document.getElementById('drawing-form').addEventListener('submit', function() {
+        const canvas = document.querySelector('.canvas-box');
+        document.getElementById('image-url-input').value = canvas.toDataURL('image/png');
+    });
+</script>
 <body>
 <section id="draw">
     <h1>Animal Drawing App</h1>
 
     <h2>Get Your Animal Prompt</h2>
     <div class="prompt-strip">
-        <p>Your animal: <strong id="animal-display"><% animal %</strong></p>
+        <p>Your animal: <strong id="animal-display"><%- animal %></strong></p>
         <button class="btn-primary">🎲 Random Animal</button>
     </div>
 
@@ -50,20 +56,23 @@
 
     <h2>Add Your Details</h2>
     <div class="draw-form">
-        <form action="/drawing" method="post">
+        <form action="/drawing" method="post" id="drawing-form">
+            <!-- Hidden inputs to carry canvas data and animal prompt -->
+            <input type="hidden" name="imageUrl" id="image-url-input"/>
+            <input type="hidden" name="animalPrompt" value="<%= animal %>"/>
             <div class="form-row">
                 <div class="form-field">
                     <label>Title</label>
-                    <input type="text" placeholder="My Magnificent Flamingo"/>
+                    <input type="text" name="title" placeholder="My Magnificent Flamingo"/>
                 </div>
                 <div class="form-field">
                     <label>Your Name</label>
-                    <input type="text" placeholder="Anonymous"/>
+                    <input type="text" name="artistName" placeholder="Anonymous"/>
                 </div>
             </div>
             <div class="form-field">
                 <label>Message</label>
-                <textarea placeholder="Tell us about your drawing…"></textarea>
+                <textarea name="message" placeholder="Tell us about your drawing…"></textarea>
             </div>
             <button class="btn-primary" type="submit">Upload to Gallery</button>
         </form>
