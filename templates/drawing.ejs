@@ -6,20 +6,14 @@
     <link rel="stylesheet" href="/style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
-<script>
-    document.getElementById('drawing-form').addEventListener('submit', function() {
-        const canvas = document.querySelector('.canvas-box');
-        document.getElementById('image-url-input').value = canvas.toDataURL('image/png');
-    });
-</script>
 <body>
 <section id="draw">
     <h1>Animal Drawing App</h1>
 
     <h2>Get Your Animal Prompt</h2>
     <div class="prompt-strip">
-        <p>Your animal: <strong id="animal-display"><%- animal %></strong></p>
-        <button class="btn-primary">🎲 Random Animal</button>
+        <p>Your animal: <strong id="animal-display"><%= animal %></strong></p>
+        <button class="btn-primary" id="random-btn">🎲 Random Animal</button>
     </div>
 
     <h2>Draw It!</h2>
@@ -32,34 +26,33 @@
             <span class="tool-group-label">Color</span>
             <div class="swatches">
                 <div class="color-swatch swatch-black selected" data-color="#2b2b2b"></div>
-                <div class="color-swatch swatch-red"></div>
-                <div class="color-swatch swatch-orange"></div>
-                <div class="color-swatch swatch-yellow"></div>
-                <div class="color-swatch swatch-green"></div>
-                <div class="color-swatch swatch-blue"></div>
-                <div class="color-swatch swatch-pink"></div>
-                <div class="color-swatch swatch-purple"></div>
+                <div class="color-swatch swatch-red" data-color="#e74c3c"></div>
+                <div class="color-swatch swatch-orange" data-color="#e67e22"></div>
+                <div class="color-swatch swatch-yellow" data-color="#f1c40f"></div>
+                <div class="color-swatch swatch-green" data-color="#2ecc71"></div>
+                <div class="color-swatch swatch-blue" data-color="#3498db"></div>
+                <div class="color-swatch swatch-pink" data-color="#ff69b4"></div>
+                <div class="color-swatch swatch-purple" data-color="#9b59b6"></div>
                 <label class="color-swatch swatch-custom" title="Custom color">
                     <input type="color" id="custom-color" value="#ffffff"/>
                 </label>
             </div>
 
             <span class="tool-group-label">Size</span>
-            <input type="range" min="1" max="40" value="5"/>
+            <input type="range" id="brush-size" min="1" max="40" value="5"/>
 
             <span class="tool-group-label">Clear</span>
             <button class="tool-btn clear-btn">🗑️</button>
         </div>
 
-        <canvas class="canvas-box" width="600" height="420"></canvas>
+        <canvas class="canvas-box" id="drawing-canvas" width="600" height="420"></canvas>
     </div>
 
     <h2>Add Your Details</h2>
     <div class="draw-form">
         <form action="/drawing" method="post" id="drawing-form">
-            <!-- Hidden inputs to carry canvas data and animal prompt -->
             <input type="hidden" name="imageUrl" id="image-url-input"/>
-            <input type="hidden" name="animalPrompt" value="<%= animal %>"/>
+            <input type="hidden" name="animalPrompt" id="animal-prompt-input" value="<%= animal %>"/>
             <div class="form-row">
                 <div class="form-field">
                     <label>Title</label>
@@ -78,5 +71,141 @@
         </form>
     </div>
 </section>
+
+<script>
+    // ── Canvas drawing ──────────────────────────────────────────
+    const canvas = document.getElementById('drawing-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height); // white background
+
+    let painting = false;
+    let currentTool = 'pen';
+    let currentColor = '#2b2b2b';
+    let brushSize = 5;
+
+    function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;   // ratio of real size to displayed size
+    const scaleY = canvas.height / rect.height;
+
+    if (e.touches) {
+        return {
+            x: (e.touches[0].clientX - rect.left) * scaleX,
+            y: (e.touches[0].clientY - rect.top) * scaleY
+        };
+    }
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
+    function startDraw(e) {
+        e.preventDefault();
+        painting = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        e.preventDefault();
+        if (!painting) return;
+        const pos = getPos(e);
+        ctx.lineWidth = brushSize;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function stopDraw() { painting = false; }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseleave', stopDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDraw);
+
+    // ── Toolbar: pen / eraser ───────────────────────────────────
+    document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTool = btn.dataset.tool;
+        });
+    });
+
+    // ── Toolbar: color swatches ─────────────────────────────────
+    document.querySelectorAll('.color-swatch[data-color]').forEach(swatch => {
+        swatch.addEventListener('click', () => {
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            swatch.classList.add('selected');
+            currentColor = swatch.dataset.color;
+            currentTool = 'pen';
+        });
+    });
+
+    document.getElementById('custom-color').addEventListener('input', (e) => {
+        currentColor = e.target.value;
+        currentTool = 'pen';
+    });
+
+    // ── Toolbar: brush size ─────────────────────────────────────
+    document.getElementById('brush-size').addEventListener('input', (e) => {
+        brushSize = e.target.value;
+    });
+
+    // ── Toolbar: clear ──────────────────────────────────────────
+    document.querySelector('.clear-btn').addEventListener('click', () => {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // ── Random animal button ────────────────────────────────────
+    document.getElementById('random-btn').addEventListener('click', async () => {
+        try {
+            const res = await fetch('/api/prompt');
+            const data = await res.json();
+            const animal = data.animal || 'Mystery Animal';
+            document.getElementById('animal-display').textContent = animal;
+            document.getElementById('animal-prompt-input').value = animal;
+        } catch (err) {
+            console.error('Failed to fetch animal:', err);
+        }
+    });
+
+    // ── Form submit: capture canvas as base64 ───────────────────
+    document.getElementById('drawing-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // stop the form from submitting until we validate
+
+    const title = document.querySelector('input[name="title"]').value.trim();
+    const artistName = document.querySelector('input[name="artistName"]').value.trim();
+    const message = document.querySelector('textarea[name="message"]').value.trim();
+
+    // check if canvas is blank (all pixels match a white background)
+    const pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    const isBlank = [...pixelData].every((val, i) => (i % 4 === 3) ? val === 255 : val === 255);
+
+    const errors = [];
+    if (!title)      errors.push('• Title is required');
+    if (!artistName) errors.push('• Your name is required');
+    if (!message)    errors.push('• Message is required');
+    if (isBlank)     errors.push('• Please draw something on the canvas');
+
+    if (errors.length > 0) {
+        alert('Please fix the following:\n\n' + errors.join('\n'));
+        return; // stop submission
+    }   
+
+    // all good — capture canvas and submit
+    document.getElementById('image-url-input').value = canvas.toDataURL('image/png');
+    this.submit();
+    });
+</script>
 </body>
 </html>

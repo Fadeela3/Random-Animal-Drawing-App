@@ -1,5 +1,11 @@
+const path = require('path');
+require("dotenv").config({
+    path: path.resolve(__dirname, ".env"),
+ });
+
 const cloudinary = require('cloudinary').v2;
 const drawing = require('./models/Drawing');
+const methodOverride = require('method-override');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,19 +14,22 @@ cloudinary.config({
 });
 
 // const http = require('http');
-const path = require('path');
+// const path = require('path');
 // const fs = require('fs'); 
 const express = require('express');
 const app = express();
-require("dotenv").config({
-   path: path.resolve(__dirname, "credentialsDontPost/.env"),
-});
+// require("dotenv").config({
+//    path: path.resolve(__dirname, "credentialsDontPost/.env"),
+// });
 const PORT = process.env.PORT || 3000;
+
 //routes
 const drawingRoute = require('./routes/drawings');
 const promptRoute = require('./routes/prompt');
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, 'templates')));
+app.use(express.json({ limit: '10mb' }));        // parse JSON bodies
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // parse form bodies
 app.get('/favicon.ico', (req, res) => res.status(204).end()); //get rid of the favicon 404 error in the browser terminal
 
 // set template engine
@@ -63,7 +72,6 @@ app.post('/drawing', async (req, res) => {
     try {
         const { animalPrompt, title, artistName, message, imageUrl } = req.body;
 
-        // Upload to Cloudinary, fall back to base64 if it fails
         let finalImageUrl;
         try {
             const uploadResult = await cloudinary.uploader.upload(imageUrl, {
@@ -80,20 +88,38 @@ app.post('/drawing', async (req, res) => {
             imageUrl: finalImageUrl,
         });
         await newDrawing.save();
+
+        // keep only the 50 most recent — delete anything older
+        const allDrawings = await drawing.find({}).sort({ dateCreated: -1 });
+        if (allDrawings.length > 50) {
+            const idsToDelete = allDrawings.slice(50).map(d => d._id);
+            await drawing.deleteMany({ _id: { $in: idsToDelete } });
+        }
+
         res.redirect('/gallery');
     } catch (err) {
         console.error("Failed to save drawing:", err);
         res.status(500).send("Something went wrong saving your drawing.");
     }
-})
+});
 
 app.get('/gallery', async (req, res) => {
     try {
-        const allDrawings = await drawing.find({}).sort({ dateCreated: -1 }); // newest first
+        const allDrawings = await drawing.find({}).sort({ dateCreated: -1 }).limit(50); // newest 50 only
         res.render("gallery", { drawings: allDrawings });
     } catch (err) {
         console.error("Failed to fetch drawings:", err);
         res.status(500).send("Something went wrong loading the gallery.");
+    }
+});
+
+app.delete('/gallery', async (req, res) => {
+    try {
+        await drawing.deleteMany({});
+        res.redirect('/gallery');
+    } catch (err) {
+        console.error("Failed to clear gallery:", err);
+        res.status(500).send("Something went wrong clearing the gallery.");
     }
 });
 

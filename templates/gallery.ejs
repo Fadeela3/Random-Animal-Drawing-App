@@ -13,7 +13,7 @@
   <nav class="navbar">
     <a href="/" class="nav-logo">🎨 Animal Drawing App</a>
     <div class="nav-links">
-      <a href="/">Draw</a>
+      <a href="/drawing">Draw</a>
       <a href="/gallery" class="active">Gallery</a>
     </div>
   </nav>
@@ -21,17 +21,16 @@
   <!-- HEADER -->
   <header class="gallery-header">
     <h1 class="gallery-title">Your Gallery</h1>
-    <p class="gallery-subtitle">A collection of creatures drawn by our visitors.</p>
+    <p class="gallery-subtitle">A collection of unique creatures.</p>
   </header>
 
   <!-- GALLERY LIST -->
   <main class="gallery-list">
-
     <% if (drawings.length === 0) { %>
       <div class="empty-state">
         <p class="empty-emoji">🦕</p>
         <p>No drawings yet — be the first to contribute!</p>
-        <a href="/" class="btn-primary">Draw something</a>
+        <a href="/drawing" class="btn-primary">Draw something</a>
       </div>
     <% } %>
 
