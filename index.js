@@ -30,7 +30,6 @@ app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, 'templates')));
 app.use(express.json({ limit: '10mb' }));        // parse JSON bodies
 app.use(express.urlencoded({ extended: true, limit: '10mb' })); // parse form bodies
-app.get('/favicon.ico', (req, res) => res.status(204).end()); //get rid of the favicon 404 error in the browser terminal
 
 // set template engine
 // const { openDelimiter } = require('ejs');
